@@ -19,12 +19,18 @@ class CategoryViewController: UIViewController {
     }
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "Category"{
-            
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        //        if segue.identifier == "Category"{
+//        if let cell = sender as? CategoryCell {
+//            let i = self.tableView.indexPath(for: cell)
+//            if segue.identifier == "Category" {
+//                let vc = segue.destination as! BookStoreViewController
+//                vc.searchString = icon_Array[i]
+//            }
+//        }
+//    }
 }
+//MARK: DataSource methods
 extension CategoryViewController :UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return icon_Array.count
@@ -42,8 +48,12 @@ extension CategoryViewController :UITableViewDataSource{
         return 1
     }
 }
+//MARK: Delegate methods
 extension CategoryViewController :UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier:"Category", sender:nil)
+        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+        let nav = storyboard.instantiateViewController(withIdentifier: "BookStoreViewController") as! BookStoreViewController
+        nav.searchString = icon_Array[indexPath.row]
+        self.navigationController?.pushViewController(nav, animated: true)
     }
 }

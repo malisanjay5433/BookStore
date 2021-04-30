@@ -13,7 +13,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        navigation()
         return true
+    }
+    private func navigation(){
+//        UINavigationBar.appearance().backgroundColor = .white
+        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000, vertical: 0), for:UIBarMetrics.default)
+//        UINavigationBar.appearance().barTintColor = .white
+//        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().tintColor = UIColor.init(named: "PrimaryColor")
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor(named: "PrimaryColor")!,
+                                                            .font : UIFont.systemFont(ofSize:16)]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(named: "PrimaryColor")!]
     }
 
     // MARK: UISceneSession Lifecycle
