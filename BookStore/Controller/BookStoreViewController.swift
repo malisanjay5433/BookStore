@@ -9,28 +9,29 @@ import UIKit
 import Alamofire
 class BookStoreViewController: UIViewController {
     @IBOutlet weak var collectionView:UICollectionView!
-    var bookstore = [Results]()
+    @IBOutlet weak var searchBox:UITextField!
+    
+    var bookstore:BooksStore?
+    var bookstoreResult = [Results]()
+    var bookstoreSearchResult = [Results]()
+    var isSearch:Bool?
+    
     var searchString:String?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = searchString
-        self.getBookStore()
+        self.getBookStore(api:API.init().endPoint + "\(searchString ?? "")")
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
+        searchBox.font = UIFont.font_Regular16
+        searchBox.delegate = self
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
     }
-    func addNavBarImage() {
-        let navController = navigationController!
-        let image = UIImage(named: "Pattern") //Your logo url here
-        let imageView = UIImageView(image: image)
-        let bannerWidth = navController.navigationBar.frame.size.width
-        let bannerHeight = navController.navigationBar.frame.size.height
-        let bannerX = bannerWidth / 2 - (image?.size.width)! / 2
-        let bannerY = bannerHeight / 2 - (image?.size.height)! / 2
-        imageView.frame = CGRect(x: bannerX, y: bannerY, width: bannerWidth, height: bannerHeight)
-        imageView.contentMode = .scaleAspectFit
-        navigationItem.titleView = imageView
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
-    
 }
 extension BookStoreViewController: UICollectionViewDataSource{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -38,17 +39,54 @@ extension BookStoreViewController: UICollectionViewDataSource{
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if (self.bookstore.count == 0) {
+        if (self.bookstoreResult.count == 0 && (self.bookstoreSearchResult.count == 0)) {
             self.collectionView.setEmptyMessage("No viewable version available.")
         } else {
             self.collectionView.restore()
         }
-        return bookstore.count
+        if isSearch == true{
+            if self.bookstoreSearchResult.count == 0{
+                self.collectionView.setEmptyMessage("No viewable version available.")
+            }
+            return self.bookstoreSearchResult.count
+        }else{
+            if self.bookstoreResult.count == 0{
+                self.collectionView.setEmptyMessage("No viewable version available.")
+            }
+            return self.bookstoreResult.count
+        }
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCell", for: indexPath) as! GenreCollectionCell
-        cell.titleLbl.text = bookstore[indexPath.row].title
+        if isSearch == true{
+            cell.titleLbl.text = self.bookstoreSearchResult[indexPath.row].title ?? ""
+        }else{
+            cell.titleLbl.text = self.bookstoreResult[indexPath.row].title ?? ""
+        }
+        if indexPath.row == (self.bookstoreResult.count) - 1{ // last cell
+            if self.bookstore?.next != nil { // more items to fetch
+                getBookStore(api:self.bookstore?.next ?? "")
+            }
+        }
         return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        UIView.animate(withDuration: 0.5) {
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCell", for: indexPath) as? GenreCollectionCell {
+                cell.transform = .init(scaleX: 0.95, y: 0.95)
+                cell.contentView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
+            }
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        UIView.animate(withDuration: 0.5) {
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCell", for: indexPath) as? GenreCollectionCell
+            {
+                cell.transform = .identity
+                cell.contentView.backgroundColor = .clear
+            }
+        }
     }
 }
 
@@ -63,25 +101,25 @@ extension BookStoreViewController: UICollectionViewDelegateFlowLayout {
             + flowLayout.sectionInset.right
             + (flowLayout.minimumInteritemSpacing * CGFloat(noOfCellsInRow - 1))
         let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(noOfCellsInRow))
-        return CGSize(width: size, height:200)
+        return CGSize(width: size, height:210)
         
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 2
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 2
+        return 0
     }
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets.init(top: 4, left: 4, bottom: 4, right: 4 )
+        return UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0 )
     }
 }
+//MARK: Use this extension to get the genre/category books.
 extension BookStoreViewController{
-    private func getBookStore(){
-        let api = "http://skunkworks.ignitesol.com:8000/books/?search=\(searchString ?? "")"
+    private func getBookStore(api:String){
         print("Api:\(api)")
         AF.request(api)
             .validate(statusCode: 200..<300)
@@ -93,7 +131,8 @@ extension BookStoreViewController{
                     do{
                         let json = try JSONDecoder.init().decode(BooksStore.self, from:response.data!)
                         print("json = \(json)") //JSONSerialization
-                        self.bookstore = json.results
+                        self.bookstore = json
+                        self.bookstoreResult.append(contentsOf: json.results)
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
                         }
@@ -107,6 +146,56 @@ extension BookStoreViewController{
     }
 }
 
+
+//MARK:Use this extension for search books by author, title, subjects and Bookshelves.
+extension BookStoreViewController:UITextFieldDelegate{
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == searchBox || textField.text!.count > 1{
+            searchBox.layer.borderColor = UIColor(named:"PrimaryColor")?.cgColor
+            searchBox.layer.borderWidth = 1
+            searchBox.textColor = UIColor(named:"PrimaryColor")
+        }
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        searchBox.layer.borderColor = UIColor(named:"SecondaryColor")?.cgColor
+        searchBox.textColor = UIColor(named:"SecondaryColor")
+        searchBox.layer.borderWidth = 1
+    }
+//    var filteredData: [Exercise] = []
+//    {
+//        didSet
+//        {
+//            tableView.reloadData()
+//        }
+//    }
+//
+//    // once we get our data, we will put it into filtered array
+//    // user will interact only with filtered array
+//    var source: [Exercise] = []
+//    {
+//        didSet
+//        {
+//            filteredData = source
+//        }
+//    }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == searchBox || searchBox.text!.count >= 3{
+            self.isSearch = true
+            let searchedBookStore = bookstoreResult.filter{($0.title?.lowercased().contains((textField.text?.lowercased())!))!}
+            self.bookstoreSearchResult = searchedBookStore
+            DispatchQueue.main.async {
+                if self.bookstoreSearchResult.count > 0{
+                    self.collectionView.reloadData()
+                }
+            }
+            return true
+        }else{
+            self.isSearch = false
+        }
+        return false
+    }
+}
+//MARK: Use this extension when the dataSource count is 0 and display the message.
 extension UICollectionView {
     func setEmptyMessage(_ message: String) {
         let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
@@ -114,12 +203,10 @@ extension UICollectionView {
         messageLabel.textColor = .black
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = .center;
-        messageLabel.font = UIFont(name: "TrebuchetMS", size: 15)
+        messageLabel.font = UIFont.body_SemiBold_Font
         messageLabel.sizeToFit()
-        
         self.backgroundView = messageLabel;
     }
-    
     func restore() {
         self.backgroundView = nil
     }

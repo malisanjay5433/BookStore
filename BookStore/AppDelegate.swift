@@ -17,13 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     private func navigation(){
-//        UINavigationBar.appearance().backgroundColor = .white
         UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000, vertical: 0), for:UIBarMetrics.default)
-//        UINavigationBar.appearance().barTintColor = .white
-//        UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().tintColor = UIColor.init(named: "PrimaryColor")
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor(named: "PrimaryColor")!,
-                                                            .font : UIFont.systemFont(ofSize:16)]
+                                                            .font : UIFont.body_SemiBold_Font]
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(named: "PrimaryColor")!]
     }
 

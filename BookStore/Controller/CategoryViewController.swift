@@ -17,18 +17,6 @@ class CategoryViewController: UIViewController {
         self.tableView.rowHeight = 90
         self.tableView.tableFooterView = UIView()
     }
-    // MARK: - Navigation
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        //        if segue.identifier == "Category"{
-//        if let cell = sender as? CategoryCell {
-//            let i = self.tableView.indexPath(for: cell)
-//            if segue.identifier == "Category" {
-//                let vc = segue.destination as! BookStoreViewController
-//                vc.searchString = icon_Array[i]
-//            }
-//        }
-//    }
 }
 //MARK: DataSource methods
 extension CategoryViewController :UITableViewDataSource{
@@ -40,6 +28,7 @@ extension CategoryViewController :UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "Category") as! CategoryCell
         cell.icon.image = UIImage(named:icon_Array[indexPath.row])
         cell.titleLbl.text = icon_Array[indexPath.row].uppercased()
+        cell.titleLbl.font = UIFont.body_bold_Font
         cell.icon.contentMode = .scaleAspectFit
         return cell
     }
@@ -47,6 +36,14 @@ extension CategoryViewController :UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Category") as! CategoryCell
+        cell.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        UIView.animate(withDuration: 0.4) {
+            cell.transform = CGAffineTransform.identity
+        }
+    }
+    
 }
 //MARK: Delegate methods
 extension CategoryViewController :UITableViewDelegate{

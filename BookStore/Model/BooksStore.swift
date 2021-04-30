@@ -9,7 +9,7 @@ import Foundation
 struct BooksStore:Decodable{
     let count:Int?
     let next:String?
-    let previous:Int?
+    let previous:String?
     let results:[Results]
 }
 struct Results:Decodable {
