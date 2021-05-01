@@ -10,12 +10,8 @@ import Alamofire
 class BookStoreViewController: UIViewController {
     @IBOutlet weak var collectionView:UICollectionView!
     @IBOutlet weak var searchBox:UITextField!
-    
     var bookstore:BooksStore?
     var bookstoreResult = [Results]()
-    var bookstoreSearchResult = [Results]()
-    var isSearch:Bool?
-    
     var searchString:String?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,31 +34,16 @@ extension BookStoreViewController: UICollectionViewDataSource{
         return 1
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        if (self.bookstoreResult.count == 0 && (self.bookstoreSearchResult.count == 0)) {
+        if (self.bookstoreResult.count == 0) {
             self.collectionView.setEmptyMessage("No viewable version available.")
         } else {
             self.collectionView.restore()
         }
-        if isSearch == true{
-            if self.bookstoreSearchResult.count == 0{
-                self.collectionView.setEmptyMessage("No viewable version available.")
-            }
-            return self.bookstoreSearchResult.count
-        }else{
-            if self.bookstoreResult.count == 0{
-                self.collectionView.setEmptyMessage("No viewable version available.")
-            }
-            return self.bookstoreResult.count
-        }
+        return self.bookstoreResult.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCell", for: indexPath) as! GenreCollectionCell
-        if isSearch == true{
-            cell.titleLbl.text = self.bookstoreSearchResult[indexPath.row].title ?? ""
-        }else{
-            cell.titleLbl.text = self.bookstoreResult[indexPath.row].title ?? ""
-        }
+        cell.titleLbl.text = self.bookstoreResult[indexPath.row].title ?? ""
         if indexPath.row == (self.bookstoreResult.count) - 1{ // last cell
             if self.bookstore?.next != nil { // more items to fetch
                 getBookStore(api:self.bookstore?.next ?? "")
@@ -70,22 +51,12 @@ extension BookStoreViewController: UICollectionViewDataSource{
         }
         return cell
     }
-    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        UIView.animate(withDuration: 0.5) {
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCell", for: indexPath) as? GenreCollectionCell {
-                cell.transform = .init(scaleX: 0.95, y: 0.95)
-                cell.contentView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
-            }
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        UIView.animate(withDuration: 0.5) {
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCell", for: indexPath) as? GenreCollectionCell
-            {
-                cell.transform = .identity
-                cell.contentView.backgroundColor = .clear
-            }
+}
+extension BookStoreViewController:UICollectionViewDelegate{
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let index =  self.bookstoreResult[indexPath.row]
+        if let url = URL(string:index.formats?.pdf ?? "") {
+            UIApplication.shared.open(url)
         }
     }
 }
@@ -145,9 +116,7 @@ extension BookStoreViewController{
             }
     }
 }
-
-
-//MARK:Use this extension for search books by author, title, subjects and Bookshelves.
+//MARK: Delegate methods of textfield
 extension BookStoreViewController:UITextFieldDelegate{
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == searchBox || textField.text!.count > 1{
@@ -156,43 +125,64 @@ extension BookStoreViewController:UITextFieldDelegate{
             searchBox.textColor = UIColor(named:"PrimaryColor")
         }
     }
+//  Use this extension for search books by author, title, subjects and Bookshelves.
+//    We can also implement search functionality in DidEndEditing and we can avoid multiple requests too.
     func textFieldDidEndEditing(_ textField: UITextField) {
         searchBox.layer.borderColor = UIColor(named:"SecondaryColor")?.cgColor
         searchBox.textColor = UIColor(named:"SecondaryColor")
         searchBox.layer.borderWidth = 1
     }
-//    var filteredData: [Exercise] = []
-//    {
-//        didSet
-//        {
-//            tableView.reloadData()
-//        }
-//    }
-//
-//    // once we get our data, we will put it into filtered array
-//    // user will interact only with filtered array
-//    var source: [Exercise] = []
-//    {
-//        didSet
-//        {
-//            filteredData = source
-//        }
-//    }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if textField == searchBox || searchBox.text!.count >= 3{
-            self.isSearch = true
-            let searchedBookStore = bookstoreResult.filter{($0.title?.lowercased().contains((textField.text?.lowercased())!))!}
-            self.bookstoreSearchResult = searchedBookStore
-            DispatchQueue.main.async {
-                if self.bookstoreSearchResult.count > 0{
-                    self.collectionView.reloadData()
+        if textField == searchBox{
+            if textField.text!.count > 3 {
+                let group = DispatchGroup()
+                let queueImage = DispatchQueue(label: "com.BookStoreSearch")
+                group.enter()
+                queueImage.async(group: group) {
+                    sleep(2)
+                    print("Search 1")
+                    DispatchQueue.main.async {
+                        self.userSearch(query:textField.text!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)
+                        group.leave()
+                    }
+                }
+                group.notify(queue: .main) {
+                    print("all finished.")
                 }
             }
             return true
-        }else{
-            self.isSearch = false
         }
         return false
+    }
+}
+//MARK: Use this extension for search books by author, title, subjects and Bookshelves.
+//      Use this extension for the user search, Accepts param as string and string converted into urlHostAllowed
+extension BookStoreViewController{
+    private func userSearch(query:String){
+        print("Search Query:\(API.init().endPoint + query)")
+        AF.request(API.init().endPoint + query)
+            .validate(statusCode: 200..<300)
+            .validate(contentType: ["application/json"])
+            .responseData { response in
+                switch response.result {
+                case .success:
+                    print("Validation Successful")
+                    self.bookstoreResult.removeAll()
+                    do{
+                        let json = try JSONDecoder.init().decode(BooksStore.self, from:response.data!)
+                        print("json = \(json)") //JSONSerialization
+                        self.bookstore = json
+                        self.bookstoreResult.append(contentsOf: json.results)
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
+                    }catch{
+                        print(error.localizedDescription)
+                    }
+                case let .failure(error):
+                    print(error)
+                }
+            }
     }
 }
 //MARK: Use this extension when the dataSource count is 0 and display the message.

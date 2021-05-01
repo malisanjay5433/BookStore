@@ -33,6 +33,7 @@
 		9104577F263C0CBA0007D9E7 /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9104576C263C0CBA0007D9E7 /* Montserrat-Light.ttf */; };
 		91045784263C0CE70007D9E7 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91045783263C0CE70007D9E7 /* Font.swift */; };
 		9104578A263C13020007D9E7 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91045789263C13020007D9E7 /* API.swift */; };
+		9165B507263D43E60048BA26 /* ReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9165B506263D43E60048BA26 /* ReaderViewController.swift */; };
 		91D1FEF0263A9B7B00B4E8DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D1FEEF263A9B7B00B4E8DC /* AppDelegate.swift */; };
 		91D1FEF2263A9B7B00B4E8DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D1FEF1263A9B7B00B4E8DC /* SceneDelegate.swift */; };
 		91D1FEF4263A9B7B00B4E8DC /* BookStoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D1FEF3263A9B7B00B4E8DC /* BookStoreViewController.swift */; };
@@ -94,6 +95,7 @@
 		9104576C263C0CBA0007D9E7 /* Montserrat-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Light.ttf"; sourceTree = "<group>"; };
 		91045783263C0CE70007D9E7 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		91045789263C13020007D9E7 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		9165B506263D43E60048BA26 /* ReaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderViewController.swift; sourceTree = "<group>"; };
 		91D1FEEC263A9B7B00B4E8DC /* BookStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D1FEEF263A9B7B00B4E8DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91D1FEF1263A9B7B00B4E8DC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 			children = (
 				91D1FEF3263A9B7B00B4E8DC /* BookStoreViewController.swift */,
 				91045744263B01DF0007D9E7 /* CategoryViewController.swift */,
+				9165B506263D43E60048BA26 /* ReaderViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -581,6 +584,7 @@
 				91D1FF2B263A9C2D00B4E8DC /* NetworkLayer.swift in Sources */,
 				91045745263B01DF0007D9E7 /* CategoryViewController.swift in Sources */,
 				91D1FEF2263A9B7B00B4E8DC /* SceneDelegate.swift in Sources */,
+				9165B507263D43E60048BA26 /* ReaderViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
