@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -245,6 +246,40 @@
             </objects>
             <point key="canvasLocation" x="1615.9420289855075" y="47.544642857142854"/>
         </scene>
+        <!--Reader View Controller-->
+        <scene sceneID="Doz-TT-sKn">
+            <objects>
+                <viewController storyboardIdentifier="ReaderViewController" id="Bpk-wT-U7H" customClass="ReaderViewController" customModule="BookStore" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="v4G-tc-REx">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uYl-eF-yBd">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="pQ9-Uw-wpY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="pQ9-Uw-wpY" firstAttribute="trailing" secondItem="uYl-eF-yBd" secondAttribute="trailing" id="5yd-LM-dX1"/>
+                            <constraint firstItem="uYl-eF-yBd" firstAttribute="top" secondItem="pQ9-Uw-wpY" secondAttribute="top" id="KXm-nN-Tnf"/>
+                            <constraint firstItem="pQ9-Uw-wpY" firstAttribute="bottom" secondItem="uYl-eF-yBd" secondAttribute="bottom" id="MuM-wU-vCr"/>
+                            <constraint firstItem="uYl-eF-yBd" firstAttribute="leading" secondItem="pQ9-Uw-wpY" secondAttribute="leading" id="n9B-Qz-6N7"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="myWebView" destination="uYl-eF-yBd" id="aEs-Tl-gNf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7CB-6A-0Cm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2307" y="60"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="0UC-pF-wjb">
             <objects>
@@ -279,5 +314,8 @@
         <namedColor name="SecondaryColor">
             <color red="0.97299998998641968" green="0.96899998188018799" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

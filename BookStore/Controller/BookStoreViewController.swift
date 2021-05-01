@@ -21,12 +21,6 @@ class BookStoreViewController: UIViewController{
         self.collectionView.delegate = self
         searchBox.font = UIFont.font_Regular16
         searchBox.delegate = self
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
-    }
-    @objc func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
-        view.endEditing(true)
     }
 }
 extension BookStoreViewController: UICollectionViewDataSource,UICollectionViewDelegate{
@@ -51,11 +45,15 @@ extension BookStoreViewController: UICollectionViewDataSource,UICollectionViewDe
         }
         return cell
     }
+    
+//    All other options pdf,rdf,ebook,zip will be share the code later.
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let index =  self.bookstoreResult[indexPath.row]
-        if let url = URL(string:index.formats?.pdf ?? "") {
-            UIApplication.shared.open(url)
-        }
+        let indexPathhtml =  self.bookstoreResult[indexPath.row].formats?.txtHtml
+        let indexPathPlainText =  self.bookstoreResult[indexPath.row].formats?.txtPlain
+        showAlert.showAlerActionSheet(indexPathhtml:indexPathhtml, indexPathPlainText: indexPathPlainText, ref:self)
+    }
+    
+    private func documentsReader(indexPathhtml:String?, indexPathPlainText:String?){
     }
 }
 extension BookStoreViewController: UICollectionViewDelegateFlowLayout {
@@ -98,7 +96,6 @@ extension BookStoreViewController{
                     print("Validation Successful")
                     do{
                         let json = try JSONDecoder.init().decode(BooksStore.self, from:response.data!)
-//                        print("json = \(json)") //JSONSerialization
                         self.bookstore = json
                         self.bookstoreResult.append(contentsOf: json.results)
                         DispatchQueue.main.async {
@@ -116,6 +113,10 @@ extension BookStoreViewController{
 //MARK: Delegate methods of textfield
 extension BookStoreViewController:UITextFieldDelegate{
     func textFieldDidBeginEditing(_ textField: UITextField) {
+//       called when 'return' key pressed. return NO to ignore.
+        func textFieldShouldReturn(textField: UITextField!) -> Bool{
+            return true;
+        }
         if textField == searchBox || textField.text!.count > 1{
             searchBox.layer.borderColor = UIColor(named:"PrimaryColor")?.cgColor
             searchBox.layer.borderWidth = 1
@@ -167,7 +168,6 @@ extension BookStoreViewController{
                     self.bookstoreResult.removeAll()
                     do{
                         let json = try JSONDecoder.init().decode(BooksStore.self, from:response.data!)
-//                        print("json = \(json)") //JSONSerialization
                         self.bookstore = json
                         self.bookstoreResult.append(contentsOf: json.results)
                         DispatchQueue.main.async {
