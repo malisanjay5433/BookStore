@@ -7,7 +7,7 @@
 
 import UIKit
 import Alamofire
-class BookStoreViewController: UIViewController {
+class BookStoreViewController: UIViewController{
     @IBOutlet weak var collectionView:UICollectionView!
     @IBOutlet weak var searchBox:UITextField!
     var bookstore:BooksStore?
@@ -17,8 +17,8 @@ class BookStoreViewController: UIViewController {
         super.viewDidLoad()
         self.title = searchString
         self.getBookStore(api:API.init().endPoint + "\(searchString ?? "")")
-        self.collectionView.delegate = self
         self.collectionView.dataSource = self
+        self.collectionView.delegate = self
         searchBox.font = UIFont.font_Regular16
         searchBox.delegate = self
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
@@ -29,7 +29,7 @@ class BookStoreViewController: UIViewController {
         view.endEditing(true)
     }
 }
-extension BookStoreViewController: UICollectionViewDataSource{
+extension BookStoreViewController: UICollectionViewDataSource,UICollectionViewDelegate{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -51,8 +51,6 @@ extension BookStoreViewController: UICollectionViewDataSource{
         }
         return cell
     }
-}
-extension BookStoreViewController:UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let index =  self.bookstoreResult[indexPath.row]
         if let url = URL(string:index.formats?.pdf ?? "") {
@@ -60,7 +58,6 @@ extension BookStoreViewController:UICollectionViewDelegate{
         }
     }
 }
-
 extension BookStoreViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView,
@@ -101,7 +98,7 @@ extension BookStoreViewController{
                     print("Validation Successful")
                     do{
                         let json = try JSONDecoder.init().decode(BooksStore.self, from:response.data!)
-                        print("json = \(json)") //JSONSerialization
+//                        print("json = \(json)") //JSONSerialization
                         self.bookstore = json
                         self.bookstoreResult.append(contentsOf: json.results)
                         DispatchQueue.main.async {
@@ -170,7 +167,7 @@ extension BookStoreViewController{
                     self.bookstoreResult.removeAll()
                     do{
                         let json = try JSONDecoder.init().decode(BooksStore.self, from:response.data!)
-                        print("json = \(json)") //JSONSerialization
+//                        print("json = \(json)") //JSONSerialization
                         self.bookstore = json
                         self.bookstoreResult.append(contentsOf: json.results)
                         DispatchQueue.main.async {

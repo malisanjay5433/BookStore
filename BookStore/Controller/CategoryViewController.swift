@@ -12,10 +12,13 @@ class CategoryViewController: UIViewController {
     let icon_Array = ["Fiction", "Drama","Humour","Politics","Philosophy","History","Adventure"]
     override func viewDidLoad() {
         super.viewDidLoad()
+        let navBackgroundImage = UIImage(named: "Pattern") // Get our image
+        self.navigationController!.navigationBar.setBackgroundImage(navBackgroundImage, for: .default) // Set the Nav Bar Image
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.rowHeight = 90
         self.tableView.tableFooterView = UIView()
+        
     }
 }
 //MARK: DataSource methods

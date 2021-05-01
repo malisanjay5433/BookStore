@@ -42,7 +42,6 @@
 		91D1FEFC263A9B7E00B4E8DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91D1FEFA263A9B7E00B4E8DC /* LaunchScreen.storyboard */; };
 		91D1FF07263A9B7E00B4E8DC /* BookStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D1FF06263A9B7E00B4E8DC /* BookStoreTests.swift */; };
 		91D1FF12263A9B7E00B4E8DC /* BookStoreUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D1FF11263A9B7E00B4E8DC /* BookStoreUITests.swift */; };
-		91D1FF2B263A9C2D00B4E8DC /* NetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D1FF2A263A9C2D00B4E8DC /* NetworkLayer.swift */; };
 		91D1FF3D263AA7AD00B4E8DC /* BooksStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D1FF3C263AA7AD00B4E8DC /* BooksStore.swift */; };
 		B2B8A3129E0BF0E7BB69E376 /* Pods_BookStoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB905F1AECC3F4CE10FEB5B2 /* Pods_BookStoreTests.framework */; };
 		DF893CDAD821F4B75847C8FF /* Pods_BookStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A50745BE88FC586BB9F6E8F4 /* Pods_BookStore.framework */; };
@@ -110,7 +109,6 @@
 		91D1FF0D263A9B7E00B4E8DC /* BookStoreUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookStoreUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D1FF11263A9B7E00B4E8DC /* BookStoreUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoreUITests.swift; sourceTree = "<group>"; };
 		91D1FF13263A9B7E00B4E8DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		91D1FF2A263A9C2D00B4E8DC /* NetworkLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLayer.swift; sourceTree = "<group>"; };
 		91D1FF3C263AA7AD00B4E8DC /* BooksStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksStore.swift; sourceTree = "<group>"; };
 		A50745BE88FC586BB9F6E8F4 /* Pods_BookStore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BookStore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB905F1AECC3F4CE10FEB5B2 /* Pods_BookStoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BookStoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -197,12 +195,12 @@
 			path = Font;
 			sourceTree = "<group>";
 		};
-		91045759263C0C780007D9E7 /* Corner + Animations */ = {
+		91045759263C0C780007D9E7 /* Corner */ = {
 			isa = PBXGroup;
 			children = (
 				9104574E263B07700007D9E7 /* RoundedCorner.swift */,
 			);
-			path = "Corner + Animations";
+			path = Corner;
 			sourceTree = "<group>";
 		};
 		91045788263C12F70007D9E7 /* API */ = {
@@ -238,7 +236,6 @@
 		91D1FEEE263A9B7B00B4E8DC /* BookStore */ = {
 			isa = PBXGroup;
 			children = (
-				91D1FF29263A9B9600B4E8DC /* WebService */,
 				91D1FF28263A9B9200B4E8DC /* Helper */,
 				91D1FF27263A9B8D00B4E8DC /* Controller */,
 				91D1FF26263A9B8900B4E8DC /* View */,
@@ -303,17 +300,9 @@
 			children = (
 				91045788263C12F70007D9E7 /* API */,
 				91045758263C0C710007D9E7 /* Font */,
-				91045759263C0C780007D9E7 /* Corner + Animations */,
+				91045759263C0C780007D9E7 /* Corner */,
 			);
 			path = Helper;
-			sourceTree = "<group>";
-		};
-		91D1FF29263A9B9600B4E8DC /* WebService */ = {
-			isa = PBXGroup;
-			children = (
-				91D1FF2A263A9C2D00B4E8DC /* NetworkLayer.swift */,
-			);
-			path = WebService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -581,7 +570,6 @@
 				91D1FEF0263A9B7B00B4E8DC /* AppDelegate.swift in Sources */,
 				9104574A263B02730007D9E7 /* CategoryCell.swift in Sources */,
 				91045754263B0CEC0007D9E7 /* GenreCollectionCell.swift in Sources */,
-				91D1FF2B263A9C2D00B4E8DC /* NetworkLayer.swift in Sources */,
 				91045745263B01DF0007D9E7 /* CategoryViewController.swift in Sources */,
 				91D1FEF2263A9B7B00B4E8DC /* SceneDelegate.swift in Sources */,
 				9165B507263D43E60048BA26 /* ReaderViewController.swift in Sources */,
